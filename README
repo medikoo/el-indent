@@ -20,7 +20,7 @@ Put my-indent in same path and rest is as follows:
 How to use ready configurations ?
 -------------------------------------------------------------------------------
 
-Load script files and add hook to your mode e.g. for lisp-mode:
+Load feature and add hook to your mode, e.g. for lisp-mode:
 
 (require 'my-indent/lisp)
 (add-hook 'lisp-mode-hook 'my-indent-set-lisp)
