@@ -12,7 +12,9 @@ how code is indented in mode you're using and you'd like to override it.
 Usage
 -------------------------------------------------------------------------------
 
-Put my-indent directory with required  into emacs load path
+Put my-elisp helpers (see my other projects) into directory named 'my' within
+your .emacs load path.
+Put my-indent in same path and rest is as follows:
 
 -------------------------------------------------------------------------------
 How to use ready configurations ?
