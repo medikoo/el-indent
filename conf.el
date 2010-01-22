@@ -14,51 +14,35 @@
 ;; PURPOSE.	 See the GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public
-;; License along with this program; if not, write to the Free
-;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-;; MA 02111-1307 USA
+;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary
+;;
+;; Usage:
+;;
+;; (require 'my-indent/conf)
+;; (add-hook 'conf-mode-hook 'my-indent-set-conf)
 
 (require 'my-indent/my-indent)
 (require 'my/list)
 
 ; Standard mode
-; Start
-(let ((elc
-			(my-indent-build-exp
+(setq my-indent-exp-conf
+	(my-indent-build-exps (let* ((main (list t))
+				(elo (list
+						(list ">")
+						(list 0)
+						(list main))))
+
+			(my-list-set main
 				(list
-					(list ">")
-					(list 0)
-					(list (setq my-indent-exp-conf-start (list t)))))))
-
-	(my-list-set my-indent-exp-conf-start
-		(my-indent-build-exp
-			(list
-				(list "</")
-				(list -1)
-				(list elc)))))
-
-; In
-(let ((elo
-			(my-indent-build-exp
-				(list
-					(list ">")
-					(list 0)
-					(list (setq my-indent-exp-conf (list t)))))))
-
-	(my-list-set my-indent-exp-conf
-		(my-indent-build-exp
-			(list
-				(list "<[^/!]"  ">" "</"  "\\\\$")
-				(list 1         0   -1    1)
-				(list elo       t   elo   nil)))))
+					(list "<[^/!]"  ">" "</"  "\\\\$")
+					(list 1         0   -1    1)
+					(list elo       t   elo   nil))))))
 
 ; Value mode
-; Start
-(setq my-indent-exp-conf-value-start nil)
-
-; In
 (setq my-indent-exp-conf-value
-	(my-indent-build-exp
+	(my-indent-build-exps
 		(list
 			(list "[^\\\\]$")
 			(list -1)
@@ -67,8 +51,7 @@
 (defun my-indent-conf ()
 	(my-indent-line (lambda ()
 			(if (looking-back "\\\\\n[ \t]*")
-				(list my-indent-exp-conf-value-start my-indent-exp-conf-value)
-				(list my-indent-exp-conf-start my-indent-exp-conf)))))
+					my-indent-exp-conf-value my-indent-exp-conf))))
 
 (defun my-indent-set-conf ()
 	(setq indent-line-function 'my-indent-conf))

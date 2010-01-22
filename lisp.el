@@ -1,4 +1,4 @@
-;; my-indent/lisp.el --- indent rules for lisp mode
+;; my-indent/lisp.el --- indent rules for any lisp mode
 
 ;; Author:	Mariusz Nowak <mariusz+emacs.my-indent@medikoo.com>
 ;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my-indent@medikoo.com>
@@ -14,36 +14,38 @@
 ;; PURPOSE.	 See the GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public
-;; License along with this program; if not, write to the Free
-;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-;; MA 02111-1307 USA
+;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary
+;;
+;; Usage:
+;;
+;; (require 'my-indent/lisp)
+;; (add-hook 'lisp-mode-hook 'my-indent-set-lisp)
+;;
+;; and for other lisp modes:
+;;
+;; (add-hook 'emacs-lisp-mode-hook 'my-indent-set-lisp)
+;; (add-hook 'scheme-mode-hook 'my-indent-set-lisp)
+;; (add-hook 'clojure-lisp-mode-hook 'my-indent-set-lisp)
 
 (require 'my-indent/my-indent)
 (require 'my/list)
 
-(setq my-indent-exp-lisp-start
-	(my-indent-build-exp
-		(list
-			(list "\)")
-			(list -1)
-			(list t))))
+(setq my-indent-exp-lisp
+	(my-indent-build-exps (let* ((main (list t))
+				(str (list
+						(list "\\\\." "\"")
+						(list 0       0)
+						(list t       main))))
 
-(let ((exp-str
-			(my-indent-build-exp
-				(list
-					(list "\\\\." "\"")
-					(list 0       0)
-					(list t       (setq my-indent-exp-lisp (list t)))))))
-
-	(my-list-set my-indent-exp-lisp
-		(my-indent-build-exp
-			(list
-				(list "\\\\." "\("  "\)"  "\""    ";")
-				(list 0       1     -1    0       0)
-				(list t       t     t     exp-str nil)))))
+			(my-list-set main (list
+					(list "\\\\." "\("  "\)"  "\""  ";")
+					(list 0       1     -1    0     0)
+					(list t       t     t     str   nil))))))
 
 (defun my-indent-lisp()
-	(my-indent-line (lambda () (list my-indent-exp-lisp-start my-indent-exp-lisp))))
+	(my-indent-line (lambda () my-indent-exp-lisp)))
 
 (defun my-indent-set-lisp ()
 	(setq indent-line-function 'my-indent-lisp))

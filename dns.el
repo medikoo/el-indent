@@ -14,30 +14,26 @@
 ;; PURPOSE.	 See the GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public
-;; License along with this program; if not, write to the Free
-;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-;; MA 02111-1307 USA
+;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary
+;;
+;; Usage:
+;;
+;; (require 'my-indent/dns)
+;; (add-hook 'dns-mode-hook 'my-indent-set-dns)
 
 (require 'my-indent/my-indent)
 
-; Start
-(setq my-indent-exp-dns-start
-	(my-indent-build-exp
-		(list
-			(list "\)")
-			(list -1)
-			(list t))))
-
-; In
 (setq my-indent-exp-dns
-	(my-indent-build-exp
+	(my-indent-build-exps
 		(list
 			(list "\("  "\)")
 			(list 1     -1)
 			(list t     t))))
 
 (defun my-indent-dns ()
-	(my-indent-line (lambda () (list my-indent-exp-dns-start my-indent-exp-dns))))
+	(my-indent-line (lambda () my-indent-exp-dns)))
 
 (defun my-indent-set-dns ()
 	(setq indent-line-function 'my-indent-dns))

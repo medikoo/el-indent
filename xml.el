@@ -14,47 +14,40 @@
 ;; PURPOSE.	 See the GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public
-;; License along with this program; if not, write to the Free
-;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-;; MA 02111-1307 USA
+;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary
+;;
+;; Usage:
+;;
+;; (require 'my-indent/xml)
+;; (add-hook 'nxml-mode-hook 'my-indent-set-xml)
 
 (require 'my-indent/my-indent)
 (require 'my/list)
 
-; Start
-(let ((elc
-			(my-indent-build-exp
-				(list
-					(list ">")
-					(list 0)
-					(list (setq my-indent-exp-xml-start (list t)))))))
+(setq my-indent-exp-xml
+	(my-indent-build-exps (let* ((main (list t))
+				(elo (list
+						(list "/>"  ">")
+						(list -1    0)
+						(list main  main)))
+				(elc (list
+						(list ">")
+						(list 0)
+						(list main))))
 
-	(my-list-set my-indent-exp-xml-start
-		(my-indent-build-exp
-			(list
-				(list "</"  "-->" "\\]\\]>")
-				(list -1    -1    -1)
-				(list elc   t     t)))))
+			(my-list-set main (list
+					(list "<[^/!]"  "/>"  ">" "</"  "<!--"  "-->" "<!\\[CDATA\\[" "\]\\]>")
+					(list 1         -1    0   -1    1       -1    1               -1)
+					(list elo       t     t   elc   t       t     t               t))))))
 
-; In
-(let* ((elo
-			(my-indent-build-exp
-				(list
-					(list "/>"                              ">")
-					(list -1                                0)
-					(list (setq my-indent-exp-xml (list t)) my-indent-exp-xml))))
-		(elc
-			(my-indent-build-exp
-				(list
-					(list ">")
-					(list 0)
-					(list my-indent-exp-xml)))))
+(defun my-indent-xml ()
+	(interactive)
+	(my-indent-line (lambda () my-indent-exp-xml)))
 
-	(my-list-set my-indent-exp-xml
-		(my-indent-build-exp
-			(list
-				(list "<[^/!]"  "/>"  ">" "</"  "<!--"  "-->" "<!\\[CDATA\\[" "\]\\]>")
-				(list 1         -1    0   -1    1       -1    1               -1)
-				(list elo       t     t   elc   t       t     t               t)))))
+(defun my-indent-set-xml ()
+	(setq indent-line-function 'my-indent-xml))
+
 
 (provide 'my-indent/xml)

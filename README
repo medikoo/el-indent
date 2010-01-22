@@ -1,0 +1,81 @@
+my-indent `indent-line-function' configurator
+
+-------------------------------------------------------------------------------
+What's the purpose ?
+-------------------------------------------------------------------------------
+
+To quckly build `indent-line-function for chosen mode.
+It may be helpful if you're writing support for a new mode or you don't like
+how code is indented in mode you're using and you'd like to override it.
+
+-------------------------------------------------------------------------------
+Usage
+-------------------------------------------------------------------------------
+Put my-indent directory with required  into emacs load path
+
+-------------------------------------------------------------------------------
+How to use ready configurations ?
+-------------------------------------------------------------------------------
+
+Load script files and add hook to your mode e.g. for lisp-mode:
+
+(require 'my-indent/lisp)
+(add-hook 'lisp-mode-hook 'my-indent-set-lisp)
+
+Naming convention for other modes stays same. For xml-mode will be:
+my-indent/xml and `my-indent-set-xml etc..
+
+-------------------------------------------------------------------------------
+How to configure your own indent function ?
+-------------------------------------------------------------------------------
+
+To configure 'indent-line-function you need to provide list of strings that
+affects indentation.
+
+Let's start with simple example:
+
+We deal with a mode in which code is nested by parenthesis.
+So '(' nests +1 and ')' nests -1, we configure rules that way:
+
+(list
+	(list "\(" "\)")
+	(list 1    -1)
+	(list t    t))
+
+In first list you group strings (in form of regexps) that affect
+indentation. In second you say which way it affects indentation
+and in third list you say what rules should be followed after that string in
+code occured. If it's same rules then you may just put t. otherwise you
+should put object with differnt rules that would be used afterwards.
+
+Sometimes in strings group you'll put string that change the rules
+of indentation but actually doesn't indent the code. You may mark this way for
+example beginning of comments. In that case you just put 0 in second list.
+
+Finally you'll pack rules into functions that can be directly used:
+
+(setq my-indent-exp-mymode
+	(my-indent-build-exps
+		(list
+			(list "\(" "\)")
+			(list 1    -1)
+			(list t    t))))
+
+; my-indent-build-exps translates your rules into expressions that are used in
+; final functions
+
+(defun my-indent-mymode ()
+	(my-indent-line (lambda () my-indent-exp-mymode)))
+
+; In place of lambda you may put your custom function that will return different
+; expressions according to point at which indent is calculated
+
+(defun my-indent-set-mymode ()
+	(setq indent-line-function 'my-indent-mymode))
+
+And that's it, such configuration may be used in way described in 'How to use
+ready configurations ?' part.
+
+Indent rules are generally more complicated than in this example. You can learn
+more from configurations that I'm using for different modes and I've included
+with this tool.
