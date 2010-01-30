@@ -1,23 +1,26 @@
-my-indent `indent-line-function' configurator
+my-indent --- `indent-line-function' configurator
 
 -------------------------------------------------------------------------------
-What's the purpose ?
+1. About
 -------------------------------------------------------------------------------
 
-To quckly build `indent-line-function for chosen mode.
-It may be helpful if you're writing support for a new mode or you don't like
-how code is indented in mode you're using and you'd like to override it.
+my-indent allows to quckly build `indent-line-function' for chosen mode.
+It may be helpful if you'd like to customize way code is indented in mode
+you're using or you're writing support for a new mode.
 
 -------------------------------------------------------------------------------
-Usage
+2. Installation
 -------------------------------------------------------------------------------
 
-Put my-elisp helpers (see my other projects) into directory named 'my' within
-your .emacs load path.
-Put my-indent in same path and rest is as follows:
+- Put my-elisp helpers (see my other projects) into folder named 'my' within
+  your .emacs load path.
+
+- Put my-indent in same path
 
 -------------------------------------------------------------------------------
-How to use ready configurations ?
+3. Usage
+-------------------------------------------------------------------------------
+3.1 How to use ready configurations ?
 -------------------------------------------------------------------------------
 
 Load feature and add hook to your mode, e.g. for lisp-mode:
@@ -25,19 +28,17 @@ Load feature and add hook to your mode, e.g. for lisp-mode:
 (require 'my-indent/lisp)
 (add-hook 'lisp-mode-hook 'my-indent-set-lisp)
 
-Naming convention for other modes stays same. For xml-mode will be:
+Naming convention for other modes stays the same. For xml-mode will be:
 my-indent/xml and `my-indent-set-xml etc..
 
 -------------------------------------------------------------------------------
-How to configure your own indent function ?
+3.2 How to configure your own indent function ?
 -------------------------------------------------------------------------------
 
 To configure 'indent-line-function you need to provide list of strings that
 affects indentation.
 
-Let's start with simple example:
-
-We deal with a mode in which code is nested by parenthesis.
+Example - let's say we deal with mode in which code is nested by parenthesis.
 So '(' nests +1 and ')' nests -1, we configure rules that way:
 
 (list
@@ -51,11 +52,11 @@ and in third list you say what rules should be followed after that string in
 code occured. If it's same rules then you may just put t. otherwise you
 should put object with differnt rules that would be used afterwards.
 
-Sometimes in strings group you'll put string that change the rules
-of indentation but actually doesn't indent the code. You may mark this way for
-example beginning of comments. In that case you just put 0 in second list.
+Sometimes in first group you'll put string that change the rules
+of indentation but actually doesn't indent the code. For example beginning of
+comments might be the case, then just put 0 in second list.
 
-Finally you'll pack rules into functions that can be directly used:
+Finally you'll pack rules into functions for direct use:
 
 (setq my-indent-exp-mymode
 	(my-indent-build-exps
@@ -64,14 +65,14 @@ Finally you'll pack rules into functions that can be directly used:
 			(list 1    -1)
 			(list t    t))))
 
-; my-indent-build-exps translates your rules into expressions that are used in
-; final functions
+; my-indent-build-exps translates your rules into expressions that are
+evaluated when actually indenting.
 
 (defun my-indent-mymode ()
 	(my-indent-line (lambda () my-indent-exp-mymode)))
 
 ; In place of lambda you may put your custom function that will return different
-; expressions according to point at which indent is calculated
+; expressions according to place in which indent is calculated
 
 (defun my-indent-set-mymode ()
 	(setq indent-line-function 'my-indent-mymode))
@@ -80,5 +81,4 @@ And that's it, such configuration may be used in way described in 'How to use
 ready configurations ?' part.
 
 Indent rules are generally more complicated than in this example. You can learn
-more from configurations that I'm using for different modes and I've included
-with this tool.
+more from configurations that are included with this project.
