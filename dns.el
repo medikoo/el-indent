@@ -23,7 +23,7 @@
 ;; (require 'my-indent/dns)
 ;; (add-hook 'dns-mode-hook 'my-indent-set-dns)
 
-(require 'my-indent/my-indent)
+(require 'my-indent/my-indent nil t)
 
 (setq my-indent-exp-dns
 	(my-indent-build-exps
@@ -33,9 +33,12 @@
 			(list t     t))))
 
 (defun my-indent-dns ()
+	"Indent current line as dns zone source text."
 	(my-indent-line (lambda () my-indent-exp-dns)))
 
+;;;###autoload
 (defun my-indent-set-dns ()
+	"Set `indent-line-function' to `my-indent-dns'."
 	(setq indent-line-function 'my-indent-dns))
 
 (provide 'my-indent/dns)

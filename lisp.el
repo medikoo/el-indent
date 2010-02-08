@@ -29,8 +29,8 @@
 ;; (add-hook 'scheme-mode-hook 'my-indent-set-lisp)
 ;; (add-hook 'clojure-lisp-mode-hook 'my-indent-set-lisp)
 
-(require 'my-indent/my-indent)
-(require 'my/list)
+(require 'my-indent/my-indent nil t)
+(require 'my/list nil t)
 
 (setq my-indent-exp-lisp
 	(my-indent-build-exps (let* ((main (list t))
@@ -44,10 +44,13 @@
 					(list 0       1     -1    0     0)
 					(list t       t     t     str   nil))))))
 
-(defun my-indent-lisp()
+(defun my-indent-lisp ()
+	"Indent current line as lisp source text."
 	(my-indent-line (lambda () my-indent-exp-lisp)))
 
+;;;###autoload
 (defun my-indent-set-lisp ()
+	"Set `indent-line-function' to `my-indent-lisp'."
 	(setq indent-line-function 'my-indent-lisp))
 
 (provide 'my-indent/lisp)

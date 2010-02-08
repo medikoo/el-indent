@@ -23,10 +23,10 @@
 ;; (require 'my-indent/conf)
 ;; (add-hook 'conf-mode-hook 'my-indent-set-conf)
 
-(require 'my-indent/my-indent)
-(require 'my/list)
+(require 'my-indent/my-indent nil t)
+(require 'my/list nil t)
 
-; Standard mode
+;; Standard mode
 (setq my-indent-exp-conf
 	(my-indent-build-exps (let* ((main (list t))
 				(elo (list
@@ -40,7 +40,7 @@
 					(list 1         0   -1    1)
 					(list elo       t   elo   nil))))))
 
-; Value mode
+;; Value mode
 (setq my-indent-exp-conf-value
 	(my-indent-build-exps
 		(list
@@ -49,11 +49,14 @@
 			(list nil))))
 
 (defun my-indent-conf ()
+	"Indent current line as configuration source text."
 	(my-indent-line (lambda ()
 			(if (looking-back "\\\\\n[ \t]*")
 					my-indent-exp-conf-value my-indent-exp-conf))))
 
+;;;###autoload
 (defun my-indent-set-conf ()
+	"Set `indent-line-function' to `my-indent-conf'."
 	(setq indent-line-function 'my-indent-conf))
 
 (provide 'my-indent/conf)

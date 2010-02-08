@@ -20,8 +20,8 @@
 ;;
 ;; See README.
 
-(require 'my/regexp)
-(require 'my/list)
+(require 'my/regexp nil t)
+(require 'my/list nil t)
 
 (defun my-indent-region (start end)
 	"`indent-region-function' to be used with this tool.
@@ -142,7 +142,8 @@
 										(copy-list (car exp))
 										(copy-list (second exp))
 										(copy-list (third exp)))))
-							(my-list-replace (third (car (last start-exps))) rules start-rules))
+							(my-list-replace (third (car (last start-exps))) rules
+								start-rules))
 						(nconc start-exps (list exp)))))
 			(setq index (+ index 1)))
 		(if (<= (length start-strings) 1)
@@ -152,12 +153,14 @@
 			(pop (third start-rules))
 			start-rules)))
 
+;;;###autoload
 (defun my-indent-build-exps (rules)
 	"Build indent expressions from given RULES.
 	RULES should be in a form of list of three lists:
 	1. First list is list of  strings that invoke indents (e.g. { } [ ]) or
 	change rules (e.g. when we enter into comment).
-	2. Second list are indent magnitudes e.g. 1 -1 0 each for each string in first list.
+	2. Second list are indent magnitudes e.g. 1 -1 0 each for each string in
+	first list.
 	3. Third list are rules that should be used after presence of string found
 	in first list. If same rules should apply then `t' can be used."
 	(setq rules (list (my-indent-calculate-start-rules rules) rules))

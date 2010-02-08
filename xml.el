@@ -23,8 +23,8 @@
 ;; (require 'my-indent/xml)
 ;; (add-hook 'nxml-mode-hook 'my-indent-set-xml)
 
-(require 'my-indent/my-indent)
-(require 'my/list)
+(require 'my-indent/my-indent nil t)
+(require 'my/list nil t)
 
 (setq my-indent-exp-xml
 	(my-indent-build-exps (let* ((main (list t))
@@ -43,10 +43,13 @@
 					(list elo       t     t   elc   t       t     t               t))))))
 
 (defun my-indent-xml ()
+	"Indent current line as xml source text."
 	(interactive)
 	(my-indent-line (lambda () my-indent-exp-xml)))
 
+;;;###autoload
 (defun my-indent-set-xml ()
+	"Set `indent-line-function' to `my-indent-xml'."
 	(setq indent-line-function 'my-indent-xml))
 
 
