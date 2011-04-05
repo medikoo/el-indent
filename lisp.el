@@ -30,7 +30,7 @@
 ;; (add-hook 'clojure-lisp-mode-hook 'my-indent-set-lisp)
 
 (require 'my-indent/my-indent nil t)
-(require 'my/list nil t)
+(require 'el-kit/list nil t)
 
 (setq my-indent-exp-lisp
 	(my-indent-build-exps (let* ((main (list t))
@@ -39,7 +39,7 @@
 						(list 0       0)
 						(list t       main))))
 
-			(my-list-set main (list
+			(el-kit-list-set main (list
 					(list "\\\\." "\("  "\)"  "\""  ";")
 					(list 0       1     -1    0     0)
 					(list t       t     t     str   nil))))))

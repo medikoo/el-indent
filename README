@@ -12,7 +12,7 @@ you're using or you're writing support for a new mode.
 2. Installation
 -------------------------------------------------------------------------------
 
-- Put my-elisp helpers (see my other projects) into folder named 'my' within
+- Put el-kit files (see my other projects) into folder named 'el-kit' within
   your .emacs load path.
 
 - Put my-indent in same path

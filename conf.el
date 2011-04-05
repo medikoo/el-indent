@@ -24,7 +24,7 @@
 ;; (add-hook 'conf-mode-hook 'my-indent-set-conf)
 
 (require 'my-indent/my-indent nil t)
-(require 'my/list nil t)
+(require 'el-kit/list nil t)
 
 ;; Standard mode
 (setq my-indent-exp-conf
@@ -34,7 +34,7 @@
 						(list 0)
 						(list main))))
 
-			(my-list-set main
+			(el-kit-list-set main
 				(list
 					(list "<[^/!]"  ">" "</"  "\\\\$")
 					(list 1         0   -1    1)

@@ -20,8 +20,8 @@
 ;;
 ;; See README.
 
-(require 'my/regexp nil t)
-(require 'my/list nil t)
+(require 'el-kit/regexp nil t)
+(require 'el-kit/list nil t)
 
 (defun my-indent-region (start end)
 	"`indent-region-function' to be used with this tool.
@@ -114,11 +114,11 @@
 	2. Second list are indent magnitues e.g. 1 -1 0 for strings in first list.
 	3. Third list are rules that should be used after presence of string found
 	in first list. If same rules should apply then `t' may be used."
-	(setcar rules (my-regexp-group (car rules)))
+	(setcar rules (el-kit-regexp-group (car rules)))
 	(dolist (x (third rules))
 		(if (and (listp x) (not (eq nil (car x))) (listp (car x)))
 			(my-indent-convert-rules x)))
-	(my-list-replace (third rules) t rules)
+	(el-kit-list-replace (third rules) t rules)
 	rules)
 
 (defun my-indent-calculate-start-rules (rules)
@@ -142,7 +142,7 @@
 										(copy-list (car exp))
 										(copy-list (second exp))
 										(copy-list (third exp)))))
-							(my-list-replace (third (car (last start-exps))) rules
+							(el-kit-list-replace (third (car (last start-exps))) rules
 								start-rules))
 						(nconc start-exps (list exp)))))
 			(setq index (+ index 1)))

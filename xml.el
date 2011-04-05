@@ -24,7 +24,7 @@
 ;; (add-hook 'nxml-mode-hook 'my-indent-set-xml)
 
 (require 'my-indent/my-indent nil t)
-(require 'my/list nil t)
+(require 'el-kit/list nil t)
 
 (setq my-indent-exp-xml
 	(my-indent-build-exps (let* ((main (list t))
@@ -37,7 +37,7 @@
 						(list 0)
 						(list main))))
 
-			(my-list-set main (list
+			(el-kit-list-set main (list
 					(list "<[^/!]"  "/>"  ">" "</"  "<!--"  "-->" "<!\\[CDATA\\[" "\]\\]>")
 					(list 1         -1    0   -1    1       -1    1               -1)
 					(list elo       t     t   elc   t       t     t               t))))))
