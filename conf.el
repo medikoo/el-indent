@@ -1,7 +1,7 @@
-;; my-indent/conf.el --- indent rules for conf-mode
+;; el-indent/conf.el --- indent rules for conf-mode
 
-;; Author:	Mariusz Nowak <mariusz+emacs.my-indent@medikoo.com>
-;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my-indent@medikoo.com>
+;; Author:	Mariusz Nowak <mariusz+el-indent@medikoo.com>
+;; Copyright (C) 2010 Mariusz Nowak <mariusz+el-indent@medikoo.com>
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -20,15 +20,15 @@
 ;;
 ;; Usage:
 ;;
-;; (require 'my-indent/conf)
-;; (add-hook 'conf-mode-hook 'my-indent-set-conf)
+;; (require 'el-indent/conf)
+;; (add-hook 'conf-mode-hook 'el-indent-set-conf)
 
-(require 'my-indent/my-indent nil t)
+(require 'el-indent/el-indent nil t)
 (require 'el-kit/list nil t)
 
 ;; Standard mode
-(setq my-indent-exp-conf
-	(my-indent-build-exps (let* ((main (list t))
+(setq el-indent-exp-conf
+	(el-indent-build-exps (let* ((main (list t))
 				(elo (list
 						(list ">")
 						(list 0)
@@ -41,22 +41,22 @@
 					(list elo       t   elo   nil))))))
 
 ;; Value mode
-(setq my-indent-exp-conf-value
-	(my-indent-build-exps
+(setq el-indent-exp-conf-value
+	(el-indent-build-exps
 		(list
 			(list "[^\\\\]$")
 			(list -1)
 			(list nil))))
 
-(defun my-indent-conf ()
+(defun el-indent-conf ()
 	"Indent current line as configuration source text."
-	(my-indent-line (lambda ()
+	(el-indent-line (lambda ()
 			(if (looking-back "\\\\\n[ \t]*")
-					my-indent-exp-conf-value my-indent-exp-conf))))
+					el-indent-exp-conf-value el-indent-exp-conf))))
 
 ;;;###autoload
-(defun my-indent-set-conf ()
-	"Set `indent-line-function' to `my-indent-conf'."
-	(setq indent-line-function 'my-indent-conf))
+(defun el-indent-set-conf ()
+	"Set `indent-line-function' to `el-indent-conf'."
+	(setq indent-line-function 'el-indent-conf))
 
-(provide 'my-indent/conf)
+(provide 'el-indent/conf)

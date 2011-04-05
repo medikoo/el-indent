@@ -1,7 +1,7 @@
-;; my-indent/xml.el --- indent rules for xml-mode
+;; el-indent/xml.el --- indent rules for xml-mode
 
-;; Author:	Mariusz Nowak <mariusz+emacs.my-indent@medikoo.com>
-;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my-indent@medikoo.com>
+;; Author:	Mariusz Nowak <mariusz+el-indent@medikoo.com>
+;; Copyright (C) 2010 Mariusz Nowak <mariusz+el-indent@medikoo.com>
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -20,14 +20,14 @@
 ;;
 ;; Usage:
 ;;
-;; (require 'my-indent/xml)
-;; (add-hook 'nxml-mode-hook 'my-indent-set-xml)
+;; (require 'el-indent/xml)
+;; (add-hook 'nxml-mode-hook 'el-indent-set-xml)
 
-(require 'my-indent/my-indent nil t)
+(require 'el-indent/el-indent nil t)
 (require 'el-kit/list nil t)
 
-(setq my-indent-exp-xml
-	(my-indent-build-exps (let* ((main (list t))
+(setq el-indent-exp-xml
+	(el-indent-build-exps (let* ((main (list t))
 				(elo (list
 						(list "/>"  ">")
 						(list -1    0)
@@ -42,15 +42,15 @@
 					(list 1         -1    0   -1    1       -1    1               -1)
 					(list elo       t     t   elc   t       t     t               t))))))
 
-(defun my-indent-xml ()
+(defun el-indent-xml ()
 	"Indent current line as xml source text."
 	(interactive)
-	(my-indent-line (lambda () my-indent-exp-xml)))
+	(el-indent-line (lambda () el-indent-exp-xml)))
 
 ;;;###autoload
-(defun my-indent-set-xml ()
-	"Set `indent-line-function' to `my-indent-xml'."
-	(setq indent-line-function 'my-indent-xml))
+(defun el-indent-set-xml ()
+	"Set `indent-line-function' to `el-indent-xml'."
+	(setq indent-line-function 'el-indent-xml))
 
 
-(provide 'my-indent/xml)
+(provide 'el-indent/xml)

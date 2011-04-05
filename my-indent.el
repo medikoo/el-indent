@@ -1,7 +1,7 @@
-;; my-indent.el --- `indent-line-function' configurator
+;; el-indent.el --- `indent-line-function' configurator
 
-;; Author:	Mariusz Nowak <mariusz+emacs.my-indent@medikoo.com>
-;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my-indent@medikoo.com>
+;; Author:	Mariusz Nowak <mariusz+el-indent@medikoo.com>
+;; Copyright (C) 2010 Mariusz Nowak <mariusz+el-indent@medikoo.com>
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -23,7 +23,7 @@
 (require 'el-kit/regexp nil t)
 (require 'el-kit/list nil t)
 
-(defun my-indent-region (start end)
+(defun el-indent-region (start end)
 	"`indent-region-function' to be used with this tool.
 	Default Emacs `indent-region-function' runs indent function with `point' at
 	beginning of line. This one makes sure that it is run when `point' is at end
@@ -36,13 +36,13 @@
 					(funcall indent-line-function)))
 			(forward-line 1))))
 
-(setq indent-region-function 'my-indent-region)
+(setq indent-region-function 'el-indent-region)
 
-(defun my-indent-start-calculate (exps bound)
+(defun el-indent-start-calculate (exps bound)
 	"Scans beginning of line to calculate indent shift for a line.
 	Used to calculate current line indent. In that case `point' is
 	`back-to-indentation' result and bound is end of line.
-	EXPS are briefly explained under `my-indent-calculate'."
+	EXPS are briefly explained under `el-indent-calculate'."
 	(if (and exps (< (point) bound))
 		(if (looking-at (car exps))
 			(progn
@@ -52,11 +52,11 @@
 						(setq group (+ 1 group)))
 					(+
 						(* tab-width (nth (- group 1) (second exps)))
-						(my-indent-start-calculate (nth (- group 1) (third exps)) bound))))
+						(el-indent-start-calculate (nth (- group 1) (third exps)) bound))))
 			0)
 		0))
 
-(defun my-indent-calculate (exps bound)
+(defun el-indent-calculate (exps bound)
 	"Scans (from `point' to BOUND) to calculate indent shift that should follow.
 	Used to calculate current line indent by reading data of previous
 	line. In that case `point' is placed after rules for beginning of line has
@@ -71,11 +71,11 @@
 		(let ((group 1))
 			(while (not (match-beginning group))
 				(setq group (+ 1 group)))
-			(+ (* tab-width (nth (- group 1) (second exps))) (my-indent-calculate
+			(+ (* tab-width (nth (- group 1) (second exps))) (el-indent-calculate
 					(nth (- group 1) (third exps)) bound)))
 		0))
 
-(defun my-indent-set-and-calculate (exp-getter)
+(defun el-indent-set-and-calculate (exp-getter)
 	"Indents given line accorting to current position and EXP-GETTER rules.
 	EXP-GETTER is function that returns two indent rules. First one is for
 	beginning of line and second is for rest of line."
@@ -83,7 +83,7 @@
 		(let ((bound (point)) exps current-column)
 			(back-to-indentation)
 			(max 0 (+ (save-excursion
-						(my-indent-start-calculate (car (funcall exp-getter)) bound))
+						(el-indent-start-calculate (car (funcall exp-getter)) bound))
 					(if (re-search-backward "^[ \t]*+[^ \t\n]" nil t)
 						(progn
 							(back-to-indentation)
@@ -93,21 +93,21 @@
 										(point-max))))
 							(setq exps (funcall exp-getter))
 							(setq current-column (current-column))
-							(my-indent-start-calculate (car exps) bound)
+							(el-indent-start-calculate (car exps) bound)
 							(+ current-column
-								(my-indent-calculate (second exps) bound)))
+								(el-indent-calculate (second exps) bound)))
 						0))))))
 
-(defun my-indent-line (exp-getter)
+(defun el-indent-line (exp-getter)
 	"Indent line function template.
-	See EXP-GETTER description in `my-indent-set-and-calculate'."
+	See EXP-GETTER description in `el-indent-set-and-calculate'."
 	(let ((offset (- (current-column) (current-indentation))))
-		(indent-line-to (my-indent-set-and-calculate exp-getter))
+		(indent-line-to (el-indent-set-and-calculate exp-getter))
 		(if (> offset 0) (forward-char offset))))
 
-(defun my-indent-convert-rules (rules)
+(defun el-indent-convert-rules (rules)
 	"Convert indent RULES into expressions that can be processed by
-	`my-indent-start-calculate' and `my-indent-calculate' functions.
+	`el-indent-start-calculate' and `el-indent-calculate' functions.
 	RULES should be in a form of list of three lists.
 	1. First list are strings that invoke indents (e.g. { } [ ])
 	or change rules (e.g. when we enter into string).
@@ -117,13 +117,13 @@
 	(setcar rules (el-kit-regexp-group (car rules)))
 	(dolist (x (third rules))
 		(if (and (listp x) (not (eq nil (car x))) (listp (car x)))
-			(my-indent-convert-rules x)))
+			(el-indent-convert-rules x)))
 	(el-kit-list-replace (third rules) t rules)
 	rules)
 
-(defun my-indent-calculate-start-rules (rules)
+(defun el-indent-calculate-start-rules (rules)
 	"Calculates indent rules for line beginnings.
-	RULES syntax is described at `my-indent-build-exps'."
+	RULES syntax is described at `el-indent-build-exps'."
 	(let* ((index 0) indent exp
 			(start-strings (list t))
 			(start-indents (list t))
@@ -154,7 +154,7 @@
 			start-rules)))
 
 ;;;###autoload
-(defun my-indent-build-exps (rules)
+(defun el-indent-build-exps (rules)
 	"Build indent expressions from given RULES.
 	RULES should be in a form of list of three lists:
 	1. First list is list of  strings that invoke indents (e.g. { } [ ]) or
@@ -163,9 +163,9 @@
 	first list.
 	3. Third list are rules that should be used after presence of string found
 	in first list. If same rules should apply then `t' can be used."
-	(setq rules (list (my-indent-calculate-start-rules rules) rules))
-	(my-indent-convert-rules (car rules))
-	(my-indent-convert-rules (second rules))
+	(setq rules (list (el-indent-calculate-start-rules rules) rules))
+	(el-indent-convert-rules (car rules))
+	(el-indent-convert-rules (second rules))
 	rules)
 
-(provide 'my-indent/my-indent)
+(provide 'el-indent/el-indent)

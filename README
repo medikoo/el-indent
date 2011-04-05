@@ -1,10 +1,10 @@
-my-indent --- `indent-line-function' configurator
+el-indent --- `indent-line-function' configurator
 
 -------------------------------------------------------------------------------
 1. About
 -------------------------------------------------------------------------------
 
-my-indent allows to quckly build `indent-line-function' for chosen mode.
+el-indent allows to quckly build `indent-line-function' for chosen mode.
 It may be helpful if you'd like to customize way code is indented in mode
 you're using or you're writing support for a new mode.
 
@@ -15,7 +15,7 @@ you're using or you're writing support for a new mode.
 - Put el-kit files (see my other projects) into folder named 'el-kit' within
   your .emacs load path.
 
-- Put my-indent in same path
+- Put el-indent in folder named 'el-indent' in same path
 
 -------------------------------------------------------------------------------
 3. Usage
@@ -25,11 +25,11 @@ you're using or you're writing support for a new mode.
 
 Load feature and add hook to your mode, e.g. for lisp-mode:
 
-(require 'my-indent/lisp)
-(add-hook 'lisp-mode-hook 'my-indent-set-lisp)
+(require 'el-indent/lisp)
+(add-hook 'lisp-mode-hook 'el-indent-set-lisp)
 
 Naming convention for other modes stays the same. For xml-mode will be:
-my-indent/xml and `my-indent-set-xml etc..
+el-indent/xml and `el-indent-set-xml etc..
 
 -------------------------------------------------------------------------------
 3.2 How to configure your own indent function ?
@@ -58,24 +58,24 @@ comments might be the case, then just put 0 in second list.
 
 Finally you'll pack rules into functions for direct use:
 
-(setq my-indent-exp-mymode
-	(my-indent-build-exps
+(setq el-indent-exp-mymode
+	(el-indent-build-exps
 		(list
 			(list "\(" "\)")
 			(list 1    -1)
 			(list t    t))))
 
-; my-indent-build-exps translates your rules into expressions that are
+; el-indent-build-exps translates your rules into expressions that are
 evaluated when actually indenting.
 
-(defun my-indent-mymode ()
-	(my-indent-line (lambda () my-indent-exp-mymode)))
+(defun el-indent-mymode ()
+	(el-indent-line (lambda () el-indent-exp-mymode)))
 
 ; In place of lambda you may put your custom function that will return different
 ; expressions according to place in which indent is calculated
 
-(defun my-indent-set-mymode ()
-	(setq indent-line-function 'my-indent-mymode))
+(defun el-indent-set-mymode ()
+	(setq indent-line-function 'el-indent-mymode))
 
 And that's it, such configuration may be used in way described in 'How to use
 ready configurations ?' part.

@@ -1,7 +1,7 @@
-;; my-indent/dns.el --- indent rules for dns-mode
+;; el-indent/dns.el --- indent rules for dns-mode
 
-;; Author:	Mariusz Nowak <mariusz+emacs.my-indent@medikoo.com>
-;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my-indent@medikoo.com>
+;; Author:	Mariusz Nowak <mariusz+el-indent@medikoo.com>
+;; Copyright (C) 2010 Mariusz Nowak <mariusz+el-indent@medikoo.com>
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -20,25 +20,25 @@
 ;;
 ;; Usage:
 ;;
-;; (require 'my-indent/dns)
-;; (add-hook 'dns-mode-hook 'my-indent-set-dns)
+;; (require 'el-indent/dns)
+;; (add-hook 'dns-mode-hook 'el-indent-set-dns)
 
-(require 'my-indent/my-indent nil t)
+(require 'el-indent/el-indent nil t)
 
-(setq my-indent-exp-dns
-	(my-indent-build-exps
+(setq el-indent-exp-dns
+	(el-indent-build-exps
 		(list
 			(list "\("  "\)")
 			(list 1     -1)
 			(list t     t))))
 
-(defun my-indent-dns ()
+(defun el-indent-dns ()
 	"Indent current line as dns zone source text."
-	(my-indent-line (lambda () my-indent-exp-dns)))
+	(el-indent-line (lambda () el-indent-exp-dns)))
 
 ;;;###autoload
-(defun my-indent-set-dns ()
-	"Set `indent-line-function' to `my-indent-dns'."
-	(setq indent-line-function 'my-indent-dns))
+(defun el-indent-set-dns ()
+	"Set `indent-line-function' to `el-indent-dns'."
+	(setq indent-line-function 'el-indent-dns))
 
-(provide 'my-indent/dns)
+(provide 'el-indent/dns)
