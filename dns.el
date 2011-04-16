@@ -1,7 +1,7 @@
 ;; el-indent/dns.el --- indent rules for dns-mode
 
-;; Author:	Mariusz Nowak <mariusz+el-indent@medikoo.com>
-;; Copyright (C) 2010 Mariusz Nowak <mariusz+el-indent@medikoo.com>
+;; Author:	Mariusz Nowak <medikoo+el-indent@medikoo.com>
+;; Copyright (C) 2010 Mariusz Nowak <medikoo+el-indent@medikoo.com>
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
