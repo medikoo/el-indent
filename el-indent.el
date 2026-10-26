@@ -20,6 +20,7 @@
 ;;
 ;; See README.
 
+(require 'cl-lib)
 (require 'el-kit/regexp nil t)
 (require 'el-kit/list nil t)
 
@@ -51,8 +52,8 @@
 					(while (not (match-beginning group))
 						(setq group (+ 1 group)))
 					(+
-						(* tab-width (nth (- group 1) (second exps)))
-						(el-indent-start-calculate (nth (- group 1) (third exps)) bound))))
+						(* tab-width (nth (- group 1) (cl-second exps)))
+						(el-indent-start-calculate (nth (- group 1) (cl-third exps)) bound))))
 			0)
 		0))
 
@@ -71,8 +72,8 @@
 		(let ((group 1))
 			(while (not (match-beginning group))
 				(setq group (+ 1 group)))
-			(+ (* tab-width (nth (- group 1) (second exps))) (el-indent-calculate
-					(nth (- group 1) (third exps)) bound)))
+			(+ (* tab-width (nth (- group 1) (cl-second exps))) (el-indent-calculate
+					(nth (- group 1) (cl-third exps)) bound)))
 		0))
 
 (defun el-indent-set-and-calculate (exp-getter)
@@ -95,7 +96,7 @@
 							(setq current-column (current-column))
 							(el-indent-start-calculate (car exps) bound)
 							(+ current-column
-								(el-indent-calculate (second exps) bound)))
+								(el-indent-calculate (cl-second exps) bound)))
 						0))))))
 
 (defun el-indent-line (exp-getter)
@@ -115,10 +116,10 @@
 	3. Third list are rules that should be used after presence of string found
 	in first list. If same rules should apply then `t' may be used."
 	(setcar rules (el-kit-regexp-group (car rules)))
-	(dolist (x (third rules))
+	(dolist (x (cl-third rules))
 		(if (and (listp x) (not (eq nil (car x))) (listp (car x)))
 			(el-indent-convert-rules x)))
-	(el-kit-list-replace (third rules) t rules)
+	(el-kit-list-replace (cl-third rules) t rules)
 	rules)
 
 (defun el-indent-calculate-start-rules (rules)
@@ -129,7 +130,7 @@
 			(start-indents (list t))
 			(start-exps (list t))
 			(start-rules (list start-strings start-indents start-exps))
-			(strings (car rules)) (indents (second rules)) (exps (third rules)))
+			(strings (car rules)) (indents (cl-second rules)) (exps (cl-third rules)))
 		(while (setq indent (nth index indents))
 			(if (< indent 0)
 				(progn (nconc start-strings (list (nth index strings)))
@@ -139,18 +140,18 @@
 						(if (eq rules exp)
 							(nconc start-exps (list t))
 							(nconc start-exps (list (list
-										(copy-list (car exp))
-										(copy-list (second exp))
-										(copy-list (third exp)))))
-							(el-kit-list-replace (third (car (last start-exps))) rules
+										(cl-copy-list (car exp))
+										(cl-copy-list (cl-second exp))
+										(cl-copy-list (cl-third exp)))))
+							(el-kit-list-replace (cl-third (car (last start-exps))) rules
 								start-rules))
 						(nconc start-exps (list exp)))))
 			(setq index (+ index 1)))
 		(if (<= (length start-strings) 1)
 			nil
 			(pop (car start-rules))
-			(pop (second start-rules))
-			(pop (third start-rules))
+			(pop (cl-second start-rules))
+			(pop (cl-third start-rules))
 			start-rules)))
 
 ;;;###autoload
@@ -165,7 +166,7 @@
 	in first list. If same rules should apply then `t' can be used."
 	(setq rules (list (el-indent-calculate-start-rules rules) rules))
 	(el-indent-convert-rules (car rules))
-	(el-indent-convert-rules (second rules))
+	(el-indent-convert-rules (cl-second rules))
 	rules)
 
 (provide 'el-indent/el-indent)
